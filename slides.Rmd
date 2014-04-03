@@ -1,0 +1,52 @@
+# An Introduction to Bioconductor's Packages for Working with Range Data
+
+**Bioconductor** is an open source software project that develops and accepts
+user-contributed R packages for bioinformatics. We're going to cover how to use
+some Bioconductor packages to work with **range data** in R.
+
+## Installation of Necessary Packages
+
+Before we get started, make sure you have R 3.0.3 installed. Then, we'll need
+to install some Bioconductor packages:
+
+    source("http://bioconductor.org/biocLite.R")
+    biocLite("GenomicRanges")
+    biocLite("GenomicFeatures")
+    install.packages("devtools")
+    library(devtools)
+    install_github('TxDb.Zmays.Ensembl.AGPv2.17', 'vsbuffalo')
+
+When learning computing, I can't stand when something is presented without much
+explanation, so we'll cover what this is doing. On a first read, you can skip
+this.
+
+If you've used R before, you've probably installed packages from CRAN, which is
+a repository for general R packages. Above, we install packages three different
+ways: from CRAN, from Bioconductor, and from Github.
+
+First, Bioconductor packages can be installed by running
+`source("http://bioconductor.org/biocLite.R")`, which loads an installation
+script. Then you can run `biocLite("packagename")` where `"packagename"` is the
+package you want to install. This is how we install `GenomicRanges` and
+`GenomicFeatures` from Bioconductor.
+
+Then, we install the package `devtools`. We need `devtools` because we it
+includes a function for installing packages from Github. I've written and
+hosted an R package called `TxDb.Zmays.Ensembl.AGPv2.17` on Github, which we
+need for this presentation.
+
+## Goals
+
+- See why ranges are so important in bioinformatics.
+- Learn why we should use specialized data structures and libraries to work
+  with range data.
+- Learn some basic functionality with `GenomicRanges` and `GenomicFeatures`.
+- Become convinced that we should learn and use `GenomicRanges` more.
+
+## Packages
+
+
+
+```{r}
+
+```
