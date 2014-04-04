@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>An Introduction to Bioconductor&#39;s Packages for Working with Range Data</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+</head>
+
+<body>
+<h1>An Introduction to Bioconductor&#39;s Packages for Working with Range Data</h1>
+
+<p><strong>Bioconductor</strong> is an open source software project that develops and accepts
+user-contributed R packages for bioinformatics. We&#39;re going to cover how to use
+some Bioconductor packages to work with <strong>range data</strong> in R.</p>
+
+<h2>Installation of Necessary Packages</h2>
+
+<p>Before we get started, make sure you have R 3.0.3 installed. Then, we&#39;ll need
+to install some Bioconductor packages:</p>
+
+<pre><code>source(&quot;http://bioconductor.org/biocLite.R&quot;)
+biocLite(&quot;GenomicRanges&quot;)
+biocLite(&quot;GenomicFeatures&quot;)
+install.packages(&quot;devtools&quot;)
+library(devtools)
+install_github(&#39;TxDb.Zmays.Ensembl.AGPv2.17&#39;, &#39;vsbuffalo&#39;)
+</code></pre>
+
+<p>When learning computing, I can&#39;t stand when something is presented without much
+explanation, so we&#39;ll cover what this is doing. On a first read, you can skip
+this.</p>
+
+<p>If you&#39;ve used R before, you&#39;ve probably installed packages from CRAN, which is
+a repository for general R packages. Above, we install packages three different
+ways: from CRAN, from Bioconductor, and from Github.</p>
+
+<p>First, Bioconductor packages can be installed by running
+<code>source(&quot;http://bioconductor.org/biocLite.R&quot;)</code>, which loads an installation
+script. Then you can run <code>biocLite(&quot;packagename&quot;)</code> where <code>&quot;packagename&quot;</code> is the
+package you want to install. This is how we install <code>GenomicRanges</code> and
+<code>GenomicFeatures</code> from Bioconductor.</p>
+
+<p>Then, we install the package <code>devtools</code>. We need <code>devtools</code> because we it
+includes a function for installing packages from Github. I&#39;ve written and
+hosted an R package called <code>TxDb.Zmays.Ensembl.AGPv2.17</code> on Github, which we
+need for this presentation.</p>
+
+<h2>Goals</h2>
+
+<ul>
+<li>See why ranges are so important in bioinformatics.</li>
+<li>Learn why we should use specialized data structures and libraries to work
+with range data.</li>
+<li>Learn some basic functionality with <code>GenomicRanges</code> and <code>GenomicFeatures</code>.</li>
+<li>Become convinced that we should learn and use <code>GenomicRanges</code> more.</li>
+</ul>
+
+<h2>Range Data</h2>
+
+<p>What is <strong>range data</strong> and why do we use it?</p>
+
+<p>Ranges can be thought of as an interger interval on a linear sequence. It turns
+out that there is a ton of bioinformatics data represented this way. For
+example:</p>
+
+<ul>
+<li>transcription factor binding sites</li>
+<li>transposon sites</li>
+<li>transcript regions, including exons, introns, etc.</li>
+<li>SNPs and structural variations</li>
+</ul>
+
+<p>This is an incomplete list; technically <strong>any data point</strong> on a genome can be
+stored range data.</p>
+
+<p>Additionally, merely storing range data isn&#39;t sufficient for the types of
+analysis we wish to do with these data. We usually want to ask questions like:</p>
+
+<ul>
+<li>how many transcription factor binding sites fall within 10kb of our genes of interest?</li>
+<li>how many transposon sites interrupt known gene regions?</li>
+<li>what&#39;s the average nucleotide diversity of all exons, compared to introns?</li>
+<li>how man SNPs fall into non-coding regions?</li>
+</ul>
+
+<p>All of these questions can be answered (actually surprisingly easily) using
+<strong>operations</strong> on ranges.</p>
+
+<p>Bioconductor&#39;s <code>GenomicRanges</code> package (and it&#39;s automatically installed sister
+package <code>IRanges</code>) provide classes in R for storing range data and doing range
+operations. Even better, these libraries are masterfully written, with the
+low-level data functions and operations all being implemented in C (which is a
+very fast language). Thus, we can load and work range data <strong>interactively</strong> in
+memory very quickly, while using a higher-level language like R.</p>
+
+<h2>IRanges Objects</h2>
+
+<p>Genomic ranges can built on generic range data on linear chromosomes.
+Appropriately, <code>GenomicRanges</code> extends a generic package called <code>IRanges</code>,
+which stores ranges on any generic linear sequence (not necessarily a
+chromosome). We start with <code>IRanges</code>, and then build up from there. The range
+operations implemented in <code>GenomicRanges</code> are actually built up from range
+operations on these generic range objects.</p>
+
+<h2>Creating IRanges Objects</h2>
+
+<p>We create <code>IRanges</code> objects with the <code>IRanges</code> function. We can specify the
+start and end positions:</p>
+
+<pre><code class="r">library(GenomicRanges)
+</code></pre>
+
+<pre><code>## Loading required package: BiocGenerics
+## Loading required package: parallel
+## 
+## Attaching package: &#39;BiocGenerics&#39;
+## 
+## The following objects are masked from &#39;package:parallel&#39;:
+## 
+##     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+##     clusterExport, clusterMap, parApply, parCapply, parLapply,
+##     parLapplyLB, parRapply, parSapply, parSapplyLB
+## 
+## The following object is masked from &#39;package:stats&#39;:
+## 
+##     xtabs
+## 
+## The following objects are masked from &#39;package:base&#39;:
+## 
+##     anyDuplicated, append, as.data.frame, as.vector, cbind,
+##     colnames, duplicated, eval, evalq, Filter, Find, get,
+##     intersect, is.unsorted, lapply, Map, mapply, match, mget,
+##     order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+##     rbind, Reduce, rep.int, rownames, sapply, setdiff, sort,
+##     table, tapply, union, unique, unlist
+## 
+## Loading required package: IRanges
+## Loading required package: XVector
+</code></pre>
+
+<pre><code class="r">i1 &lt;- IRanges(start = c(3, 6, 10), end = c(7, 12, 18))
+i2 &lt;- IRanges(start = c(1, 3, 20), end = c(5, 8, 29))
+</code></pre>
+
+<p>These look like:</p>
+
+<pre><code>## Loading required package: ggplot2
+## Need specific help about ggbio? try mailing 
+##  the maintainer or visit http://tengfei.github.com/ggbio/
+## 
+## Attaching package: &#39;ggbio&#39;
+## 
+## The following objects are masked from &#39;package:ggplot2&#39;:
+## 
+##     geom_bar, geom_rect, geom_segment, ggsave, stat_bin,
+##     stat_identity, xlim
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-2"/> </p>
+
+<p>We could also create ranges by specifying the width and start (or end)
+position. For example, SNPs have a width of 1, so we might create them with:</p>
+
+<pre><code class="r">snps &lt;- IRanges(start = c(3, 4, 1, 6, 7), width = 1)
+</code></pre>
+
+<p>Of course, this is quite tedious; later we&#39;ll see how to load data like BED
+files or create data from tab-delimited data.</p>
+
+<h2>Accessing Data in Ranges</h2>
+
+<p>We can access range data through <em>accessor</em> functions. For start, end, and
+width of <code>IRanges</code> objects we use <code>start</code>, <code>end</code>, and <code>width</code> functions:</p>
+
+<pre><code class="r">start(i1)
+</code></pre>
+
+<pre><code>## [1]  3  6 10
+</code></pre>
+
+<pre><code class="r">end(i1)
+</code></pre>
+
+<pre><code>## [1]  7 12 18
+</code></pre>
+
+<pre><code class="r">width(i2)
+</code></pre>
+
+<pre><code>## [1]  5  6 10
+</code></pre>
+
+<h2>Basic Range Operations</h2>
+
+<p>We can find overlaps between <code>IRanges</code> objects with the <code>findOverlaps</code> function.
+This function returns a matrix of matches in either, which will make more sense in a second.</p>
+
+<pre><code class="r">hits &lt;- findOverlaps(i1, i2)
+hits
+</code></pre>
+
+<pre><code>## Hits of length 3
+## queryLength: 3
+## subjectLength: 3
+##   queryHits subjectHits 
+##    &lt;integer&gt;   &lt;integer&gt; 
+##  1         1           1 
+##  2         1           2 
+##  3         2           2
+</code></pre>
+
+<p><code>findOverlaps</code> returns a matrix with what range in the <em>query</em> matches overlaps a range in the <em>subject</em>. As with many 
+Bioconductor objects, we use accessor functions to access these data. For example, we can see how wide ranges in overlapping <em>subjects</em> are with:</p>
+
+<pre><code class="r">width(i2[subjectHits(hits)])
+</code></pre>
+
+<pre><code>## [1] 5 6 6
+</code></pre>
+
+<p>This is a good example of how <code>findOverlaps</code> works. Since the first range in <code>i1</code> overlaps both the first and second ranges in <code>i2</code>, <em>both</em> are reported. </p>
+
+<p>We can also count the overlaps that a <em>query</em> has in a <em>subject</em> with the function <code>countOverlaps</code>:</p>
+
+<pre><code class="r">countOverlaps(i1, i2)
+</code></pre>
+
+<pre><code>## [1] 2 1 0
+</code></pre>
+
+<h3>Finding IRanges Objects</h3>
+
+<p>Often in biology, we need to find the gene <em>nearest</em> to a specific site (represented as a range), or find the nearest range that precedes another range. IRanges has numerous functions to make these types of operations easy (see the manual for a full list). Let&#39;s see a few:</p>
+
+<pre><code class="r">i2
+</code></pre>
+
+<pre><code>## IRanges of length 3
+##     start end width
+## [1]     1   5     5
+## [2]     3   8     6
+## [3]    20  29    10
+</code></pre>
+
+<pre><code class="r">nearest(IRanges(start = 30, width = 1), i2)
+</code></pre>
+
+<pre><code>## [1] 3
+</code></pre>
+
+<pre><code class="r">precede(IRanges(start = 30, width = 1), i2)
+</code></pre>
+
+<pre><code>## [1] NA
+</code></pre>
+
+<pre><code class="r">precede(IRanges(start = 5, width = 1), i2)
+</code></pre>
+
+<pre><code>## [1] 3
+</code></pre>
+
+<p>Note that <em>precede</em> does not allow for preceding ranges to overlap!</p>
+
+<h2>Genomic Ranges</h2>
+
+<p>Ranges on a genome are built from <code>IRanges</code>. <code>GenomicRanges</code> offer important features needed to identify a region on a genome through its <code>GRanges</code> object:</p>
+
+<ol>
+<li>Chromosome (called <code>seqname</code> in R, to allow for non-chromosomal sequences like scaffolds).</li>
+<li>Strand</li>
+</ol>
+
+<p>Additionally, <code>GRanges</code> object can optionally carry information such as the length of chromosomes in the genome and whether chromosomes are circular (e.g. in the case of mitocondrial and chloroplast chromsomes).</p>
+
+<p>Finally, the best feature of <code>GRanges</code> is that it stores <em>metadata</em>. This is the most powerful feature of <code>GRanges</code>. Ranges alone are boring — they just tell you the &ldquo;where&rdquo; but not the &ldquo;what&rdquo;, which is what we carry about in bioinformatics and biology.</p>
+
+<p>Metadata in <code>GRanges</code> is how we annotate a specific region with the data on that region. For example, these data may be:</p>
+
+<ul>
+<li>Gene name, transcript name, gene ID, transcript ID, splicing information.</li>
+<li>GC content, nucleotide diversity. </li>
+<li>SNP quality, genotypes of individuals.</li>
+</ul>
+
+<p>Metadata is stored in a <code>DataFrame</code>. Bioconductor&#39;s <code>DataFrame</code> work exactly like R&#39;s <code>data.frame</code>, except they allow for more efficient storage of genomic data. <code>DataFrames</code> do this through a trick called <em>run length encoding</em>, in which long runs of data such as chromosome 1, chromosome 1, &hellip;, chromosome 1, chromosome 2 are stored as 145,024 chromosome 1s, 358,502 chromosome 2s, etc. We won&#39;t go into the specifics here, but this is a term you&#39;ll see working with <code>GenomicRanges</code> and a concept you&#39;ll have to familiarize yourself with eventually.</p>
+
+<h3>Creating and Using Genomic Ranges objects</h3>
+
+<p>We create <code>GRanges</code> objects just as we created <code>IRanges</code> objects, except with additional information:</p>
+
+<pre><code class="r">gr1 &lt;- GRanges(seqnames = &quot;chr1&quot;, IRanges(start = 356, 390), strand = &quot;+&quot;, data_id = &quot;some data&quot;)
+gr2 &lt;- GRanges(seqnames = &quot;chr1&quot;, IRanges(start = 3793, 4005), strand = &quot;+&quot;, 
+    data_id = &quot;more data&quot;)
+gr1
+</code></pre>
+
+<pre><code>## GRanges with 1 range and 1 metadata column:
+##       seqnames     ranges strand |     data_id
+##          &lt;Rle&gt;  &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt;
+##   [1]     chr1 [356, 390]      + |   some data
+##   ---
+##   seqlengths:
+##    chr1
+##      NA
+</code></pre>
+
+<pre><code class="r">gr2
+</code></pre>
+
+<pre><code>## GRanges with 1 range and 1 metadata column:
+##       seqnames       ranges strand |     data_id
+##          &lt;Rle&gt;    &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt;
+##   [1]     chr1 [3793, 4005]      + |   more data
+##   ---
+##   seqlengths:
+##    chr1
+##      NA
+</code></pre>
+
+<p>Each of these range objects stores a single region, and single column (named <code>data_id</code>) of metadata.</p>
+
+<p>As with <code>IRanges</code> objects, the accessors <code>start</code>, <code>end</code>, and <code>width</code> work, as well as some new ones: <code>seqnames</code>, <code>strand</code>, and <code>mcols</code>. <code>mcols</code> returns the <code>DataFrame</code> of metadata, and is using quite frequently:</p>
+
+<pre><code class="r">mcols(gr1)
+</code></pre>
+
+<pre><code>## DataFrame with 1 row and 1 column
+##       data_id
+##   &lt;character&gt;
+## 1   some data
+</code></pre>
+
+<p>The <code>GenomicRanges</code> package <em>overloads</em> many of the common functions in R like <code>c</code> to work with <code>GRanges</code> data. For example, we combine <code>GRanges</code> objects with:</p>
+
+<pre><code class="r">gr &lt;- c(gr1, gr2)
+gr
+</code></pre>
+
+<pre><code>## GRanges with 2 ranges and 1 metadata column:
+##       seqnames       ranges strand |     data_id
+##          &lt;Rle&gt;    &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt;
+##   [1]     chr1 [ 356,  390]      + |   some data
+##   [2]     chr1 [3793, 4005]      + |   more data
+##   ---
+##   seqlengths:
+##    chr1
+##      NA
+</code></pre>
+
+<p>You&#39;ll see that R is doing a pretty nice job of printing these data. Note that <code>seqlengths</code> is <code>NA</code>, since we haven&#39;t specified the sequence (e.g. chromsome lengths). We could through, with:</p>
+
+<pre><code class="r">seqlengths(gr) &lt;- c(chr1 = 12951230)
+</code></pre>
+
+<p>Note that our old friends <code>findOverlaps</code> and <code>countOverlaps</code> work too. Bioconductor has very advanced features for computing overlaps, given how incredibly important these are in bioinformatics tasks like ChIP-Seq, RNA-seq, etc. We won&#39;t introduce these here, but the <code>GenomicRanges</code> vignette and manual are terrific.</p>
+
+<h3>Lists</h3>
+
+<p>R uses lists extensively for two many purposes:</p>
+
+<ol>
+<li>To store heterogenous data types (recall that all elements in a vector will be coerced to a common type)</li>
+<li>To group data a certain way. </li>
+</ol>
+
+<p>Number (2) is especially relevant to using an object called <code>GRangesList</code> that we haven&#39;t encountered yet. Consider tasks like grouping <code>GRanges</code> objects by transcript or gene ID. We want a collection of many <em>separate</em> <code>GRanges</code> objects. This is where <code>GRangesList</code> comes in handy. We&#39;ll see an example of these object in the next section.</p>
+
+<h3>Genomic Features</h3>
+
+<p>These data so far aren&#39;t real, or exciting. As a final motivating example, I will show you a package I wrote using a sister package of <code>GenomicRages</code>: <code>GenomicFeatures</code>. These help in creating and working with <code>GRanges</code> objects storing transcript annotation.</p>
+
+<p>Let&#39;s play around with the package a bit. First, we load the package, and to avoid typing out this long name (the name follows a Bioconductor standard naming scheme), we alias it to <code>txdb</code>:</p>
+
+<pre><code class="r">library(TxDb.Zmays.Ensembl.AGPv2.17)
+</code></pre>
+
+<pre><code>## Loading required package: GenomicFeatures
+## Loading required package: AnnotationDbi
+## Loading required package: Biobase
+## Welcome to Bioconductor
+## 
+##     Vignettes contain introductory material; view with
+##     &#39;browseVignettes()&#39;. To cite Bioconductor, see
+##     &#39;citation(&quot;Biobase&quot;)&#39;, and for packages &#39;citation(&quot;pkgname&quot;)&#39;.
+</code></pre>
+
+<pre><code class="r">txdb &lt;- TxDb.Zmays.Ensembl.AGPv2.17
+txdb
+</code></pre>
+
+<pre><code>## TranscriptDb object:
+## | Db type: TranscriptDb
+## | Supporting package: GenomicFeatures
+## | Data source: ftp://ftp.ensemblgenomes.org/pub/plants/release-17/gtf/zea_mays/Zea_mays.AGPv2.17.gtf.gz
+## | Organism: Zea mays
+## | miRBase build ID: NA
+## | transcript_nrow: 88611
+## | exon_nrow: 280561
+## | cds_nrow: 251121
+## | Db created by: GenomicFeatures package from Bioconductor
+## | Creation time: 2014-03-18 15:13:03 -0700 (Tue, 18 Mar 2014)
+## | GenomicFeatures version at creation time: 1.14.5
+## | RSQLite version at creation time: 0.11.4
+## | DBSCHEMAVERSION: 1.0
+</code></pre>
+
+<p><code>txdb</code> is an object that&#39;s a link to a SQLite database full of maize annotation from Ensembl. Again, we work with accessor functions to extract data from it. For example, we can extract all genes as <code>GRanges</code> objects with:</p>
+
+<pre><code class="r">zm_genes &lt;- genes(txdb)
+</code></pre>
+
+<p>Let&#39;s play around with this <code>GRanges</code> object to see some real examples. For example, how many genes are there?</p>
+
+<pre><code class="r">length(zm_genes)
+</code></pre>
+
+<pre><code>## [1] 63331
+</code></pre>
+
+<p>This is a lot of genes! This because this is the whole gene set from Ensembl (which, as far as I can tell, doesn&#39;t have a column indicating filtered status). My package also contains the filtered gene set, <code>TxDb.Zmays.EnsemblFiltered.AGPv2.17</code>. </p>
+
+<p>These are genic regions. With these data, we could create a histogram of all gene lengths:</p>
+
+<pre><code class="r">qplot(width(zm_genes), geom = &quot;histogram&quot;)
+</code></pre>
+
+<pre><code>## stat_bin: binwidth defaulted to range/30. Use &#39;binwidth = x&#39; to adjust this.
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-17"/> </p>
+
+<p>We could also look at summary statistics on length:</p>
+
+<pre><code class="r">summary(width(zm_genes))
+</code></pre>
+
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##      76     665    1560    3040    3500  192000
+</code></pre>
+
+<p>With these data, we could use very generic range operations to create new interesting ranges. There also functions to grab the promoter regions, given a certain number of upstream and downstream bases. These can be applied to ranges or <code>txdb</code> objects:</p>
+
+<pre><code class="r">promoters(txdb, upstream = 4000)
+</code></pre>
+
+<pre><code>## Warning: trimmed start values to be positive
+## Warning: trimmed end values to be &lt;= seqlengths
+</code></pre>
+
+<pre><code>## GRanges with 88611 ranges and 2 metadata columns:
+##                seqnames           ranges strand   |     tx_id
+##                   &lt;Rle&gt;        &lt;IRanges&gt;  &lt;Rle&gt;   | &lt;integer&gt;
+##       [1]             1 [  5856,  10055]      +   |     75031
+##       [2]             1 [ 58502,  62701]      +   |     75032
+##       [3]             1 [ 58734,  62933]      +   |     75033
+##       [4]             1 [ 72120,  76319]      +   |     75034
+##       [5]             1 [106765, 110964]      +   |     75035
+##       ...           ...              ...    ... ...       ...
+##   [88607] mitochondrion [502097, 506296]      -   |       212
+##   [88608] mitochondrion [504276, 508475]      -   |       213
+##   [88609] mitochondrion [510067, 514266]      -   |       214
+##   [88610] mitochondrion [548496, 552695]      -   |       215
+##   [88611] mitochondrion [564318, 568517]      -   |       216
+##                     tx_name
+##                 &lt;character&gt;
+##       [1] GRMZM2G059856_T01
+##       [2] GRMZM5G811273_T02
+##       [3] GRMZM5G811273_T01
+##       [4] GRMZM2G059778_T01
+##       [5] GRMZM2G394757_T01
+##       ...               ...
+##   [88607] GRMZM5G847102_T01
+##   [88608] GRMZM5G899452_T01
+##   [88609] GRMZM5G887911_T01
+##   [88610] GRMZM5G880315_T01
+##   [88611] GRMZM5G872234_T01
+##   ---
+##   seqlengths:
+##      chloroplast mitochondrion       UNKNOWN ...             4             1
+##           140384        569630       7140151 ...     241473504     301354135
+</code></pre>
+
+<p>There are also methods in Bioconductor packages to extract sequence from these regions. Depending on the exact task, I may do this through the shell with <a href="https://github.com/arq5x/bedtools2">bedtools</a>.</p>
+
+<p>Gene ranges are a bit low resolution — suppose we want to look at all exons:</p>
+
+<pre><code class="r">zm_exons &lt;- exons(txdb)
+zm_exons
+</code></pre>
+
+<pre><code>## GRanges with 280561 ranges and 1 metadata column:
+##                 seqnames           ranges strand   |   exon_id
+##                    &lt;Rle&gt;        &lt;IRanges&gt;  &lt;Rle&gt;   | &lt;integer&gt;
+##        [1]             1   [ 9856, 10388]      +   |    237421
+##        [2]             1   [62502, 62504]      +   |    237422
+##        [3]             1   [62572, 62710]      +   |    237423
+##        [4]             1   [62734, 62958]      +   |    237424
+##        [5]             1   [63296, 63402]      +   |    237425
+##        ...           ...              ...    ... ...       ...
+##   [280557] mitochondrion [501949, 502296]      -   |       258
+##   [280558] mitochondrion [504158, 504475]      -   |       259
+##   [280559] mitochondrion [509973, 510266]      -   |       260
+##   [280560] mitochondrion [548031, 548695]      -   |       261
+##   [280561] mitochondrion [564155, 564517]      -   |       262
+##   ---
+##   seqlengths:
+##      chloroplast mitochondrion       UNKNOWN ...             4             1
+##           140384        569630       7140151 ...     241473504     301354135
+</code></pre>
+
+<p>This object is all exons, without very much other data. We can group exons or transcripts by gene (or transcript) ID using functions <code>exonsBy</code> or <code>transcriptsBy</code>:</p>
+
+<pre><code class="r">zm_exons_tx &lt;- exonsBy(txdb, &quot;tx&quot;)
+zm_exons_tx
+</code></pre>
+
+<pre><code>## GRangesList of length 88611:
+## $1 
+## GRanges with 1 range and 3 metadata columns:
+##          seqnames        ranges strand |   exon_id   exon_name exon_rank
+##             &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; | &lt;integer&gt; &lt;character&gt; &lt;integer&gt;
+##   [1] chloroplast [6392, 12986]      + |         1        &lt;NA&gt;         1
+## 
+## $2 
+## GRanges with 1 range and 3 metadata columns:
+##          seqnames         ranges strand | exon_id exon_name exon_rank
+##   [1] chloroplast [21468, 24695]      + |       2      &lt;NA&gt;         1
+## 
+## $3 
+## GRanges with 1 range and 3 metadata columns:
+##          seqnames         ranges strand | exon_id exon_name exon_rank
+##   [1] chloroplast [24733, 26784]      + |       3      &lt;NA&gt;         1
+## 
+## ...
+## &lt;88608 more elements&gt;
+## ---
+## seqlengths:
+##    chloroplast mitochondrion       UNKNOWN ...             4             1
+##         140384        569630       7140151 ...     241473504     301354135
+</code></pre>
+
+<p>With these grouped exons, we may want to ask which fall in a particular range. Again, Bioconductor makes this a fairly high-level operation by writing methods that work with many different types of objects (such as <code>GRangesList</code>). So to get all genes on chromosome 7 on either strand, starting from 104,203,103 and include 10Mbp:</p>
+
+<pre><code class="r">query &lt;- GRanges(&quot;7&quot;, IRanges(start = 104203103, width = 1e+07), strand = &quot;*&quot;)
+findOverlaps(query, zm_exons_tx)
+</code></pre>
+
+<pre><code>## Hits of length 261
+## queryLength: 1
+## subjectLength: 88611
+##     queryHits subjectHits 
+##      &lt;integer&gt;   &lt;integer&gt; 
+##  1           1       29874 
+##  2           1       29875 
+##  3           1       29876 
+##  4           1       29877 
+##  5           1       29878 
+##  ...       ...         ... 
+##  257         1       33515 
+##  258         1       33516 
+##  259         1       33517 
+##  260         1       33518 
+##  261         1       33519
+</code></pre>
+
+<h2>Conclusion and Resources</h2>
+
+<p>This is a very fast introduction! If you aren&#39;t a bit confused, it&#39;s either because you&#39;ve left the room or you&#39;ve fallen asleep. </p>
+
+<p>My goal here was not to be comphrensive (there&#39;s certainly not enough time for that), but rather to show you why we should use these tools, how they are helpful, and introduce enough of the infrastructure that you won&#39;t have to start from zero.</p>
+
+<p>The best place to start is the <code>GenomicRanges</code> <a href="http://www.bioconductor.org/packages/release/bioc/vignettes/GenomicRanges/inst/doc/GenomicRangesIntroduction.pdf">introduction</a>.</p>
+
+<p>The <code>GenomicRanges</code> <a href="http://www.bioconductor.org/packages/release/bioc/vignettes/GenomicRanges/inst/doc/GenomicRangesHOWTOs.pdf">How To</a> is quite good too.</p>
+
+<p>There&#39;s always a tradeoff between three things in bioinformatics: computational speed, interactivity, and development time. We like computational speed to be fast, and development time to be low. Interactivity makes development, debugging, and figuring out what we&#39;re doing easier. There are likely faster custom solutions to <code>GenomicRanges</code>. But these sacrifice the incredible interactivity of <code>GenomicRanges</code> and fast development time. Given how high interactivity and low development time is for working with <code>GenomicRanges</code>, it&#39;s speed (quite fast!) is incredible.</p>
+
+</body>
+
+</html>
+
