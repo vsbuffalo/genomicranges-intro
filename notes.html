@@ -736,6 +736,38 @@ findOverlaps(query, zm_exons_tx)
 ##  261         1       33519
 </code></pre>
 
+<h2>Other Bioconductor Packages</h2>
+
+<p><code>GenomicRanges</code> and <code>GenomicFeatures</code> are scratching the surface of Bioconductor&#39;s great packages. Other useful packages are:</p>
+
+<ul>
+<li>Annotation packages, which store mappings of gene IDs to names, GO terms, etc.</li>
+<li><code>RSamtools</code> for working with BAM files. There are special classes for working with and visualizing alignments.</li>
+<li>Genome packages, which compress genomes and allow them to be used in R.</li>
+<li>Terrific visualization packages like <code>ggbio</code> and <code>Gviz</code>.</li>
+</ul>
+
+<pre><code class="r">data(geneModels)
+</code></pre>
+
+<pre><code>## Warning: data set &#39;geneModels&#39; not found
+</code></pre>
+
+<pre><code class="r">grtrack &lt;- GeneRegionTrack(geneModels, genome = &quot;hg19&quot;, chromosome = &quot;chr7&quot;, 
+    name = &quot;Gene Model&quot;)
+</code></pre>
+
+<pre><code>## Error: could not find function &quot;GeneRegionTrack&quot;
+</code></pre>
+
+<pre><code class="r">plotTracks(grtrack)
+</code></pre>
+
+<pre><code>## Error: could not find function &quot;plotTracks&quot;
+</code></pre>
+
+<p>I&#39;ve done this example data, because I&#39;m still working out some issues with Ensembl gene annotation (grrr!).</p>
+
 <h2>Conclusion and Resources</h2>
 
 <p>This is a very fast introduction! If you aren&#39;t a bit confused, it&#39;s either because you&#39;ve left the room or you&#39;ve fallen asleep. </p>
